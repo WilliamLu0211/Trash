@@ -7,8 +7,9 @@
 3. [Lung Cancer Rates](https://gis.cdc.gov/Cancer/USCS/DataViz.html): This source gives data on lung cancer rates in the United States by state. 
 
 #### How to make this data come alive
-- 
-- 
+- There will be a map of the US and using buttons, the user will be able to see the car an air pollution density.
+- Clicking on specific state will bring up a modal with bar graphs displaying (traffic rates, air pollution rates, air pollution history, car fatalities, lung disease)
+- Our visualization allows the user to explore the correlation between the amount of cars in a location to the amount of pollution in that location. Then, for each state, show the correlation between traffic rates, air pollution rates, air pollution history, (car fatalities), and lung disease. The data allows the user to question whether there is a truly a relationship between the data or if the data is independent of each other.
 #### D3 feature utilization
 - **Enter/Exit Selections**
   - There exists a form on top that will allow users to enter data per state
