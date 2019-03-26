@@ -10,6 +10,14 @@
 - 
 - 
 #### D3 feature utilization
-- 
-- 
+- **Enter/Exit Selections**
+  - There exists a form on top that will allow users to enter data per state
+- **Transitions**
+  - Transition when you click on a specific state to show car and air pollution density
+  - [Example:](https://bl.ocks.org/mbostock/2206590) click-to-zoom via transform
+  - [Example:](https://observablehq.com/@mbostock/u-s-airports-voronoi) This Voronoi diagram shows the region that is closest to each airport
+- **Responsiveness/Interactivity**
+  - We will have 2 Buttons to switch between car and pollution on the map of the US
+  - [Example:](https://observablehq.com/@d3/bivariate-choropleth) Diabetes and obesity rates by county, 2013 estimates
+  - [Example:](https://observablehq.com/@d3/bubble-map) Estimated population by county, 2016
 #### Sketch
