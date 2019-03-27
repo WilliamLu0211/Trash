@@ -22,3 +22,5 @@
   - [Example:](https://observablehq.com/@d3/bivariate-choropleth) Diabetes and obesity rates by county, 2013 estimates
   - [Example:](https://observablehq.com/@d3/bubble-map) Estimated population by county, 2016
 #### Sketch
+![Air Pollution](https://scontent-iad3-1.xx.fbcdn.net/v/t1.15752-9/55628887_2461785304048863_2311413684875821056_n.png?_nc_cat=100&_nc_ht=scontent-iad3-1.xx&oh=690bed6d395a4491f68d446d2520fed5&oe=5D03A056)
+![Traffic](https://scontent-iad3-1.xx.fbcdn.net/v/t1.15752-9/55504352_622413418197546_1092187772233449472_n.png?_nc_cat=105&_nc_ht=scontent-iad3-1.xx&oh=ac6ebe1cf1cdc21208539020a35723f1&oe=5D1740D0)
