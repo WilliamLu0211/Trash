@@ -2205,7 +2205,7 @@ GPORT YC,Gulfport-Biloxi,US,pm25,6.7,2019-04-01 20:00:00+00:00,µg/m³,AirNow,30
 GPORT YC,Gulfport-Biloxi,US,o3,0.049,2019-04-01 20:00:00+00:00,ppm,AirNow,30.39,-89.0497,1.0,
 WAVELAND,Gulfport-Biloxi,US,o3,0.047,2019-04-01 19:00:00+00:00,ppm,AirNow,30.3008,-89.3958,1.0,
 WAVELAND,Gulfport-Biloxi,US,pm25,5.8,2019-04-01 19:00:00+00:00,µg/m³,AirNow,30.3008,-89.3958,1.0,
-Kihei, Maui,Kahului-Wailuku,US,pm25,6.0,2019-04-01 19:00:00+00:00,µg/m³,AirNow,20.7808,-156.4461,1.0,
+Kihei, Maui,US,pm25,6.0,2019-04-01 19:00:00+00:00,µg/m³,AirNow,20.7808,-156.4461,1.0,
 DURHAM,Lewiston-Auburn,US,o3,0.049,2019-04-01 19:00:00+00:00,ppm,AirNow,43.97445,-70.12489,1.0,
 Lewiston,Lewiston-Auburn,US,pm25,5.0,2019-04-01 19:00:00+00:00,µg/m³,AirNow,44.089355,-70.214134,1.0,
 SPARTAN - Mammoth Cave,Mammoth Cave NP,US,pm25,7.1,2014-08-12 20:00:00+00:00,µg/m³,Spartan,37.132,-86.148,1.0,
