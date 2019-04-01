@@ -1,3 +1,6 @@
+# IN ORDER FOR THIS TO WORK, YOU NEED TO INSTALL Google Cloud BigQuery (pip install google-cloud-bigquery)
+# You also need google credentials (see: https://cloud.google.com/docs/authentication/getting-started)
+
 from google.cloud import bigquery
 
 client = bigquery.Client()
