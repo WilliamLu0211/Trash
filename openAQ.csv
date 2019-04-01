@@ -2466,7 +2466,7 @@ South Bend-Shields D,South Bend-Mishawaka,US,pm25,18.3,2016-03-13 05:00:00+00:00
 Truckee BAM,Truckee-Grass Valley,US,pm25,20.0,2019-04-01 07:00:00+00:00,µg/m³,AirNow,39.3386,-120.1703,1.0,
 Grass Valley,Truckee-Grass Valley,US,o3,0.053,2019-04-01 19:00:00+00:00,ppm,AirNow,39.2344,-121.0556,1.0,
 Grass Valley,Truckee-Grass Valley,US,pm25,7.0,2019-04-01 19:00:00+00:00,µg/m³,AirNow,39.2344,-121.0556,1.0,
-Waverly, Airport,Waterloo-Cedar Falls,US,o3,0.04,2019-04-01 19:00:00+00:00,ppm,AirNow,42.7431,-92.5131,1.0,
+Waverly, Waterloo-Cedar Falls,US,o3,0.04,2019-04-01 19:00:00+00:00,ppm,AirNow,42.7431,-92.5131,1.0,
 Waterloo, Water Towe,Waterloo-Cedar Falls,US,pm25,7.0,2019-04-01 19:00:00+00:00,µg/m³,AirNow,42.5014,-92.3158,1.0,
 WEIRTON,Weirton-Steubenville,US,o3,0.044,2019-04-01 19:00:00+00:00,ppm,AirNow,40.42735,-80.59253,1.0,
 Steubenville,Weirton-Steubenville,US,pm25,5.2,2019-04-01 19:00:00+00:00,µg/m³,AirNow,40.36645,-80.61569,1.0,
