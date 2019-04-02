@@ -27,7 +27,7 @@
 #### LAUNCH CODES
 First, clone this repository:
 ```
-$ git clone https://github.com/jerry1ye10/Dry-Popcorn.git
+$ git clone https://github.com/WilliamLu0211/Trash.git
 ```
 Activate your virtual environment. If you do not have one set up, you may create one in the current working directory, and activate it like so:
 ```
