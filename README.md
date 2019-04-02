@@ -24,3 +24,36 @@
 #### Sketch
 ![Air Pollution](https://scontent-iad3-1.xx.fbcdn.net/v/t1.15752-9/55628887_2461785304048863_2311413684875821056_n.png?_nc_cat=100&_nc_ht=scontent-iad3-1.xx&oh=690bed6d395a4491f68d446d2520fed5&oe=5D03A056)
 ![Traffic](https://scontent-iad3-1.xx.fbcdn.net/v/t1.15752-9/55504352_622413418197546_1092187772233449472_n.png?_nc_cat=105&_nc_ht=scontent-iad3-1.xx&oh=ac6ebe1cf1cdc21208539020a35723f1&oe=5D1740D0)
+#### LAUNCH CODES
+First, clone this repository:
+```
+$ git clone https://github.com/jerry1ye10/Dry-Popcorn.git
+```
+Activate your virtual environment. If you do not have one set up, you may create one in the current working directory, and activate it like so:
+```
+$ python3 -m venv dc
+$ . dc/bin/activate
+```
+
+Next, change your directory to go into your local copy of the repository:
+```
+(dc)$ cd Trash
+```
+Now, install all of the requirements needed to run this project. This command simply installs jinja and Flask. Flask is the python framework used to allow for simpler software development. Jinja is used to connect front end HTML/CSS code to back-end Python Flask code.
+
+```
+(dc)$ pip install -r requirements.txt
+```
+
+Now, run the python file to start the Flask server:
+```
+(dc)$ python3 app.py
+```
+
+
+Finally, open your web browser and open `localhost:5000`.
+
+To terminate your server instance, type <kbd> CTRL </kbd> + <kbd> C </kbd>.
+
+To exit your virtual environment, run the command `$ deactivate`.
+
