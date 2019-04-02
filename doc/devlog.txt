@@ -46,3 +46,7 @@ johnsonL -- 2019-04-01 22:20
 --------------------------------------------------------------
 - Added Flask skeleton
 - Added function for querying data
+==============================================================
+williamL -- 2019-04-02 18:55
+--------------------------------------------------------------
+- implemented click to zoom functionality on the US map
