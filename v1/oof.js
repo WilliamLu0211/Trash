@@ -7,9 +7,10 @@ var width = 960, height = 650, centered;
 var path = d3.geoPath();
 // .projection(projection);
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#map").append("svg")
             .attr("width", width)
             .attr("height", height);
+            // .style("border", "1px solid");
 
 svg.append("rect")
    .attr("class", "background")
@@ -60,3 +61,16 @@ function clicked(d) {
    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
    .style("stroke-width", 1.5 / k + "px");
 }
+
+var cd = document.getElementById("cd");
+var lcr = document.getElementById("lcr");
+
+cd.addEventListener('click', function(){
+  cd.setAttribute("class", "btn btn-primary");
+  lcr.setAttribute("class", "btn btn-secondary");
+});
+
+lcr.addEventListener('click', function(){
+  lcr.setAttribute("class", "btn btn-primary");
+  cd.setAttribute("class", "btn btn-secondary");
+});

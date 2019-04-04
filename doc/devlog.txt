@@ -50,3 +50,8 @@ johnsonL -- 2019-04-01 22:20
 williamL -- 2019-04-02 18:55
 --------------------------------------------------------------
 - implemented click to zoom functionality on the US map
+==============================================================
+williamL -- 2019-04-03 21:45
+--------------------------------------------------------------
+- imported bootstrap and modified the layout
+- added buttons to switch between maps
