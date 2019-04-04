@@ -55,3 +55,7 @@ williamL -- 2019-04-03 21:45
 --------------------------------------------------------------
 - imported bootstrap and modified the layout
 - added buttons to switch between maps
+==============================================================
+johnsonL -- 2019-04-04 15:25
+--------------------------------------------------------------
+- made parser and converted data from csv to json
