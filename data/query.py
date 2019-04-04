@@ -5,12 +5,15 @@ import pandas
 
 def col_query(file_name, *args):
     try:
-        data = {}
+        data = []
         csvdata = pandas.read_csv(file_name)
 
-        for arg in args:
-            if str(arg) in list(csvdata):
-                data[str(arg)] = json.dumps(csvdata[str(arg)].tolist())
+        # for arg in args:
+        #     if str(arg) in list(csvdata):
+        #         data[str(arg)] = json.dumps(csvdata[str(arg)].tolist())
+        for i in range(1, csvdata.size):
+            to_add = {}
+            print(csvdata.values[i])
 
         return data
 
