@@ -64,6 +64,7 @@ svg.append("rect")
    .on("click", clicked);
 
 var g = svg.append("g");
+var text;
 
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   if (error) throw error;
@@ -74,10 +75,9 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
    .data(topojson.feature(us, us.objects.states).features)
    .enter().append("path")
    .attr("d", path)
-   .on("click", clicked);
-   // .on("mouseover", function(d){
-   //   console.log(states[d.id]);
-   // });
+   .on("click", clicked)
+   .on("mouseover", hovered)
+   .on("mouseoff", unhovered);
 
   g.append("path")
    .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
@@ -85,9 +85,9 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
    .attr("d", path);
 });
 
-var text;
-
 function clicked(d) {
+  if(text)
+    unhovered();
   var x, y, k;
   if (d && centered !== d) {
     var centroid = path.centroid(d);
@@ -95,18 +95,18 @@ function clicked(d) {
     y = centroid[1];
     k = 4;
     centered = d;
-    if (!text){
-      text = svg.append("text")
-
-    }
-    text.html(states[d.id])
-        .attr("x", x - states[d.id].length * 3)
-        .attr("y", y - 15);
+    // if (!text){
+    //   text = svg.append("text")
+    //
+    // }
+    // text.html(states[d.id])
+    //     .attr("x", x - states[d.id].length * 3)
+    //     .attr("y", y - 15);
   } else {
-    if (text){
-      text.remove();
-      text = null;
-    }
+    // if (text){
+    //   text.remove();
+    //   text = null;
+    // }
     x = width / 2;
     y = height / 2;
     k = 1;
@@ -121,12 +121,32 @@ function clicked(d) {
    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
    .style("stroke-width", 1.5 / k + "px");
 
-  if (text)
-    text.transition()
-        .duration(750)
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-        .style("stroke-width", 1.5 / k + "px");
+  // if (text)
+  //   text.transition()
+  //       .duration(750)
+  //       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+  //       .style("stroke-width", 1.5 / k + "px");
 }
+
+var hovered = function(d){
+  if (text)
+    unhovered();
+  var x, y;
+  var centroid = path.centroid(d);
+  x = centroid[0];
+  y = centroid[1];
+  text = svg.append("text")
+  text.html(states[d.id])
+      .attr("x", x - states[d.id].length * 10)
+      .attr("y", y);
+
+};
+
+var unhovered = function(d){
+  text.remove();
+  text = null;
+};
+
 
 var cd = document.getElementById("cd");
 var lcr = document.getElementById("lcr");
