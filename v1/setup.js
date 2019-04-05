@@ -89,23 +89,19 @@ var text;
 
 function clicked(d) {
   var x, y, k;
-  // if (text)
-    // text.remove();
   if (d && centered !== d) {
     var centroid = path.centroid(d);
     x = centroid[0];
     y = centroid[1];
     k = 4;
     centered = d;
-    // var box = path.bounds(d);
-    // console.log();
     if (!text){
       text = svg.append("text")
 
     }
     text.html(states[d.id])
-        .attr("x", x - states[d.id].length * 4.5)
-        .attr("y", y - 20);;
+        .attr("x", x - states[d.id].length * 3)
+        .attr("y", y - 15);
   } else {
     if (text){
       text.remove();
@@ -130,21 +126,6 @@ function clicked(d) {
         .duration(750)
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
         .style("stroke-width", 1.5 / k + "px");
-
-   // if (zoomIn){
-   //   // text = svg.append("text")
-   //   //           .attr("x", x - states[d.id].length * 4.5)
-   //   //           .attr("y", path.bounds(d)[0][1] + 40)
-   //   //           .html(states[d.id]);
-   //   text = svg.append("text")
-   //             .attr("x", width / 2)
-   //             .attr("y", height / 2)
-   //             .html(states[d.id]);
-   // }
-   // else{
-   //   text.remove();
-   // }
-
 }
 
 var cd = document.getElementById("cd");
