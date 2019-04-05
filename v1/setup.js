@@ -1,16 +1,61 @@
+var states = {"53":"Washington",
+               "41":"Oregon",
+               "06":"California",
+               "32":"Nevada",
+               "16":"Idaho",
+               "49":"Utah",
+               "04":"Arizona",
+               "35":"New Mexico",
+               "08":"Colorado",
+               "56":"Wyoming",
+               "30":"Montana",
+               "38":"North Dakota",
+               "46":"South Dakota",
+               "31":"Nebraska",
+               "20":"Kansas",
+               "40":"Oklahoma",
+               "48":"Texas",
+               "27":"Minnesota",
+               "19":"Iowa",
+               "29":"Missouri",
+               "05":"Arkansas",
+               "22":"Louisiana",
+               "28":"Mississippi",
+               "01":"Alabama",
+               "13":"Georgia",
+               "12":"Florida",
+               "45":"South Carolina",
+               "37":"North Carolina",
+               "47":"Tennessee",
+               "21":"Kentucky",
+               "51":"Virginia",
+               "54":"West Virginia",
+               "24":"Maryland",
+               "10":"Delaware",
+               "39":"Ohio",
+               "18":"Indiana",
+               "17":"Illinois",
+               "42":"Pennsylvania",
+               "34":"New Jersey",
+               "55":"Wisconsin",
+               "26":"Michigan",
+               "36":"New York",
+               "09":"Connecticut",
+               "44":"Rhode Island",
+               "25":"Massachusetts",
+               "50":"Vermont",
+               "33":"New Hampshire",
+               "23":"Maine",
+               "02":"Alaska",
+               "15":"Hawaii"};
+
 var width = 960, height = 650, centered;
 
-   // var projection = d3.geoAlbersUsa()
-   //  .scale(1070)
-   //  .translate([width / 2, height / 2]);
-
 var path = d3.geoPath();
-// .projection(projection);
 
 var svg = d3.select("#map").append("svg")
             .attr("width", width)
             .attr("height", height);
-            // .style("border", "1px solid");
 
 svg.append("rect")
    .attr("class", "background")
@@ -30,6 +75,9 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
    .enter().append("path")
    .attr("d", path)
    .on("click", clicked);
+   // .on("mouseover", function(d){
+   //   console.log(states[d.id]);
+   // });
 
   g.append("path")
    .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
@@ -37,16 +85,32 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
    .attr("d", path);
 });
 
+var text;
+
 function clicked(d) {
   var x, y, k;
-
+  // if (text)
+    // text.remove();
   if (d && centered !== d) {
     var centroid = path.centroid(d);
     x = centroid[0];
     y = centroid[1];
     k = 4;
     centered = d;
+    // var box = path.bounds(d);
+    // console.log();
+    if (!text){
+      text = svg.append("text")
+
+    }
+    text.html(states[d.id])
+        .attr("x", x - states[d.id].length * 4.5)
+        .attr("y", y - 20);;
   } else {
+    if (text){
+      text.remove();
+      text = null;
+    }
     x = width / 2;
     y = height / 2;
     k = 1;
@@ -60,6 +124,27 @@ function clicked(d) {
    .duration(750)
    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
    .style("stroke-width", 1.5 / k + "px");
+
+  if (text)
+    text.transition()
+        .duration(750)
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+        .style("stroke-width", 1.5 / k + "px");
+
+   // if (zoomIn){
+   //   // text = svg.append("text")
+   //   //           .attr("x", x - states[d.id].length * 4.5)
+   //   //           .attr("y", path.bounds(d)[0][1] + 40)
+   //   //           .html(states[d.id]);
+   //   text = svg.append("text")
+   //             .attr("x", width / 2)
+   //             .attr("y", height / 2)
+   //             .html(states[d.id]);
+   // }
+   // else{
+   //   text.remove();
+   // }
+
 }
 
 var cd = document.getElementById("cd");
