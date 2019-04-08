@@ -56,7 +56,7 @@ var lung_cancer_state = {'56': 50, '54': 110, '37': 80, '22': 76, '45': 82, '36'
 var air_pollution = {'56': 29.0, '54': 5.7, '28': 39.0, '22': 13.9, '50': 4.2, '19': 17.0, '35': 29.0, '23': 60.0, '24': 26.0, '25': 43.0, '26': 51.5, '27': 59.0, '06': 233.0, '21': 28.0, '04': 79.0, '49': 91.0, '46': 130.0, '47': 9.6, '08': 24.0, '45': 31.0, '42': 29.7, '29': 66.0, '40': 43.0, '41': 14.0, '09': 12.0, '05': 6.0, '51': 9.6, '02': 76.0, '01': 25.0, '13': 12.0, '12': 38.0, '20': 40.0, '10': 4.4, '39': 19.2, '38': 32.0, '15': 29.0, '48': 29.4, '17': 17.5, '16': 20.0, '55': 28.0, '32': 74.0, '31': 7.0, '30': 38.0, '37': 22.0, '36': 87.0, '53': 151.0, '34': 25.0, '33': 5.0, '18': 22.0, '44': 3.0} //Measured in  µg/m³
 
 
-var width = 1100, height = 650, centered;
+var width = 1150, height = 650, centered;
 
 var path = d3.geoPath();
 
@@ -180,9 +180,6 @@ var unhovered = function(d){
   text = null;
 };
 
-var car_density = function(d){
-  // d.attr('fill', function(d) { return color(d); })
-}
 
 // Color legend.
 var colorScale = d3.scaleQuantize()
@@ -195,12 +192,19 @@ var colorLegend = d3.legendColor()
   .shapePadding(5)
   .shapeWidth(50)
   .shapeHeight(20)
-  .labelOffset(12);
+  .labelOffset(12)
+  .title("Air Pollution Levels in µg/m³");
 
 svg.append("g")
-  .attr("transform", "translate(850, 400)")
+  .attr("transform", "translate(900, 300)")
   .style("font-size","5px")
   .call(colorLegend);
+
+
+  // .on("cellclick", function(d){alert("clicked " + d);});
+
+svg.select(".legendSymbol")
+  .call(legendPath);
 
 
 var cd = document.getElementById("cd");
