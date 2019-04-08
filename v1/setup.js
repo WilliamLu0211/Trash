@@ -156,7 +156,9 @@ function clicked(d) {
     y = height / 2;
     k = 1;
     centered = null;
-    car_density();
+    if(cd_clicked){
+      car_density();
+    }
   }
 
   g.selectAll("path")
