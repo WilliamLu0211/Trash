@@ -259,6 +259,7 @@ var hovered = function(d){
   }
 };
 
+// remove label when not hovering
 var unhovered = function(d){
   if (label){
     label.remove();
@@ -337,6 +338,7 @@ var car_density = function(){
       var x = state_centers[state["id"]][0];
       var y = state_centers[state["id"]][1];
 
+      // dots are randomly generated based on the center of the states      
       for(i = 0; i<Math.round(car_accidents[state["id"]]/100); i++){
         var rand_border = border_cors[Math.floor(Math.random()*border_cors.length)];
         // console.log(x, rand_border[0]);
@@ -375,6 +377,7 @@ var lung_density = function(){
       var x = state_centers[state["id"]][0];
       var y = state_centers[state["id"]][1];
 
+      // dots are randomly generated based on the center of the states
       for(i = 0; i<Math.round(lung_cancer_state[state["id"]]/10); i++){
         var rand_border = border_cors[Math.floor(Math.random()*border_cors.length)];
         x = random_between(x, rand_border[0]);
@@ -414,12 +417,7 @@ cd.addEventListener('click', function(){
     }
     cd_clicked = !cd_clicked;
   }
-  // s = "{"
-  // for (ss of Object.keys(sum)){
-  //   s += "'" + ss + "'" + ":[" + sum[ss][0] + "," + sum[ss][1] + "],"
-  // }
-  // s = s.substring(0, s.length - 1) + "}";
-  // console.log(s, Object.keys(sum).length);
+
 });
 
 lcr.addEventListener('click', function(){
