@@ -119,6 +119,9 @@ function clicked(d) {
     unhovered();
   var x, y, k;
   if (d && centered !== d) {
+    var newString = "State: " + states[d.id] + "," + " Car Accidents: " + String(car_accidents[d.id]) + " deaths, Lung Cancer Cases: " + String(lung_cancer_state[d.id]) + " per 100,000 people per state, Air Pollution: " + String(air_pollution[d.id]) + "µg/m³";
+    document.getElementById("data").hidden = false;
+    document.getElementById("data").innerHTML = newString;
     var centroid = path.centroid(d);
     x = centroid[0];
     y = centroid[1];
@@ -136,6 +139,7 @@ function clicked(d) {
     //   text.remove();
     //   text = null;
     // }
+    document.getElementById("data").hidden = true;
     x = width / 2;
     y = height / 2;
     k = 1;
