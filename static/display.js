@@ -77,6 +77,8 @@ var detail, label;
 var cd_clicked = false;
 var lcr_clicked = false;
 var zoomed = false;
+var cars_drawn = false;
+var lungs_drawn = false;
 
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   if (error) throw error;
@@ -127,8 +129,6 @@ function remove_circles(circles){
 
 function clicked(d) {
   unhovered();
-  remove_circles(circles_cars);
-  remove_circles(circles_lungs);
   if (detail){
     detail.remove();
     detail = null;
@@ -145,6 +145,8 @@ function clicked(d) {
     centered = d;
     remove_circles(circles_cars);
     remove_circles(circles_lungs);
+    cars_drawn = false;
+    lungs_drawn = false;
     // if (!text){
     detail = svg.append("text");
 
@@ -193,10 +195,10 @@ function clicked(d) {
     y = height / 2;
     k = 1;
     centered = null;
-    if(cd_clicked){
+    if(cd_clicked && !cars_drawn){
       car_density();
     }
-    if(lcr_clicked){
+    if(lcr_clicked && !lungs_drawn){
       lung_density();
     }
   }
@@ -341,6 +343,7 @@ var car_density = function(){
       }
     }
   });
+  cars_drawn = true;
 };
 
 var lung_density = function(){
@@ -374,6 +377,7 @@ var lung_density = function(){
       }
     }
   });
+  lungs_drawn = true;
 };
 
 var cd = document.getElementById("cd");
@@ -388,6 +392,7 @@ cd.addEventListener('click', function(){
     else{
       remove_circles(circles_cars);
       cd.setAttribute("class", "btn btn-secondary");
+      cars_drawn = false;
     }
     cd_clicked = !cd_clicked;
   }
@@ -408,6 +413,7 @@ lcr.addEventListener('click', function(){
     else{
       remove_circles(circles_lungs);
       lcr.setAttribute("class", "btn btn-secondary");
+      lungs_drawn = false;
     }
     lcr_clicked = !lcr_clicked;
   }
