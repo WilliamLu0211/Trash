@@ -5,6 +5,7 @@ import ssl
 
 context = ssl._create_unverified_context()
 
+# pulls the data from openAQ dataset
 def get_state():
 
     f = open("data/openAQ.csv", "r")

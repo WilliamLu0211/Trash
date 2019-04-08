@@ -1,8 +1,8 @@
 import os
 import json, csv
 
-# import pandas
-
+# function to make a list of dictionaries of the data 
+# for easy access in js
 def col_query(file_name, *args):
     data = []
     with open(file_name) as file:

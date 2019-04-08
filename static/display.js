@@ -1,3 +1,4 @@
+// center of each state on the map. Used for plotting points.
 var state_centers = {'10':[840.2066179677938,255.63732126174412],'12':[755.7455589627274,507.77862074199203],'13':[724.6900955022221,421.08405926136544],'15':[294.8045564922889,563.9882785155545],'16':[195.69641319595496,144.04932750429586],'17':[605.5763832710608,265.66623033740524],'18':[655.1309047705755,264.6912334156099],'19':[531.5840559002303,223.46911250901823],'20':[449.1730262150776,304.19757566749564],'21':[677.655116118911,315.7724926729923],'22':[567.4194512748293,470.7758518227551],'23':[904.8901409133521,91.86682235977892],'24':[818.8052621621626,259.14984417158763],'25':[883.6611759972714,169.60417446521842],'26':[659.2381728731771,164.2050159543356],'27':[516.5946653249242,129.6414015896711],'28':[608.5724003479579,430.5058530941247],'29':[551.7866256428767,306.6374343984268],'30':[282.51861048889253,97.84955423272905],'31':[427.3878540702531,234.86498780130137],'32':[139.96003190313502,247.69480087851903],'33':[878.895001668018,137.77025897772197],'34':[848.2752124691982,226.3400237317859],'35':[305.79809621840445,386.95742730333643],'36':[821.0483874311232,168.85705199139625],'37':[788.6451313495172,344.85361485855384],'38':[422.4987986530495,102.22408188477799],'39':[712.6873765706466,248.7517063896311],'40':[463.4685502305517,369.98958043796404],'41':[101.04986267322434,131.70723811769813],'42':[793.3713505198033,221.84576222657273],'44':[890.783475076746,181.18284880525738],'45':[767.2927002325082,386.0424383160666],'46':[423.130656806072,169.3620783670036],'47':[663.1906107071137,355.3419995607502],'48':[427.38996674052504,461.72137863589705],'49':[223.2502814234199,264.31946020337864],'50':[859.8485575029607,133.62590954714943],'51':[790.1958748968983,299.4572677108202],'53':[122.30239154218933,57.68528887763333],'54':[754.8872268789042,279.9511484889455],'55':[585.573902034637,163.7758248372078],'56':[303.1196645277344,191.96194785876492],'06':[80.82258312576948,283.40167845343757],'04':[204.82509225786282,376.1956676070532],'08':[326.45245404671317,285.1175806413173],'05':[554.9820493311587,384.6340056909818],'01':[661.2989606456629,425.24010249738404],'09':[872.259991483655,187.21492246865907],'02':[100.87677335205404,514.8161067939221]};
 var states = {"53":"Washington",
                "41":"Oregon",
@@ -62,6 +63,7 @@ var width = 1300, height = 650, centered;
 
 var path = d3.geoPath();
 
+// add map svg to html
 var svg = d3.select("#map").append("svg")
             .attr("width", width)
             .attr("height", height);
@@ -83,6 +85,7 @@ var lungs_drawn = false;
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   if (error) throw error;
 
+  // add states onto the svg
   g.append("g")
    .attr("id", "states")
    .selectAll("path")
@@ -97,6 +100,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
    .on("mouseover", hovered)
    .on("mouseoff", unhovered);
 
+  // add state borders onto svg
   g.append("path")
    .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
    .attr("id", "state-borders")
@@ -105,6 +109,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 
 });
 
+// hex to rgb
 function rgb(c) {
     if(c == 255){
       c = 250
@@ -121,12 +126,15 @@ function rgb(c) {
     return "#" + component + component + component;
 }
 
+// remove all circles plotted for car density and lung cancer rate
 function remove_circles(circles){
   for(var i = 0; i < circles.length; i ++){
     circles[i].remove();
   }
 }
 
+// function for event listener for when a state is clicked
+// when a state is clicked, remove dots, if any, zoom in on the state and show the relevant info
 function clicked(d) {
   unhovered();
   if (detail){
@@ -138,19 +146,20 @@ function clicked(d) {
 
   if (d && centered !== d) {
 
+    // center of the state that was clicked
     var centroid = path.centroid(d);
     x = centroid[0];
     y = centroid[1];
     k = 4;
     centered = d;
+
+    // remove dots
     remove_circles(circles_cars);
     remove_circles(circles_lungs);
     cars_drawn = false;
     lungs_drawn = false;
-    // if (!text){
     detail = svg.append("text");
 
-    // }
     if (zoomed)
       detail.attr("x", width / 2 - 100)
           .attr("y", height / 2);
@@ -159,6 +168,8 @@ function clicked(d) {
           .attr("y", y - 15);
 
     zoomed = true;
+
+    // add information to text
     detail.append("tspan")
         .html("State: " + states[d.id]);
 
@@ -179,11 +190,7 @@ function clicked(d) {
 
     if (states[d.id] == "California")
       detail.style("fill", "#FFFFFF");
-    // var newString = "State: " + states[d.id] + "\n" + " Car Accidents: " + String(car_accidents[d.id]*100) + " deaths, Lung Cancer Cases: " + String(lung_cancer_state[d.id]*100000) + "people, Air Pollution: " + String(air_pollution[d.id]) + "µg/m³";
-
-    // text.html(newString)
-    //     .attr("x", x - states[d.id].length * 3)
-    //     .attr("y", y - 15);
+    
   } else {
     if (detail){
       detail.remove();
@@ -195,6 +202,8 @@ function clicked(d) {
     y = height / 2;
     k = 1;
     centered = null;
+
+    // check for buttons for dots
     if(cd_clicked && !cars_drawn){
       car_density();
     }
@@ -203,6 +212,7 @@ function clicked(d) {
     }
   }
 
+  // code for zooming in
   g.selectAll("path")
    .classed("active", centered && function(d) { return d === centered; });
 
@@ -217,7 +227,10 @@ function clicked(d) {
    .attr("transform", "translate(" + (width / 2 - 100) + "," + height / 2 + ")translate(" + -x + "," + -y + ")");
    // .style("stroke-width", 1.5 / k + "px");
 }
+
 sum = {};
+
+// when a state is being hovered, show that states name
 var hovered = function(d){
   if (!zoomed || d != centered){
     unhovered();
@@ -257,7 +270,7 @@ var unhovered = function(d){
 var cir = d3.symbol().type(d3.symbolCircle)();
 console.log(cir);
 
-// Color legend.
+// Color legend for air pollution
 var colorScale = d3.scaleQuantize()
   .domain([233, 3])
   .range(colorbrewer.Greys[9].reverse());
@@ -300,7 +313,7 @@ svg.select(".legendOrdinal")
 
 
   // .on("cellclick", function(d){alert("clicked " + d);});
-
+// function for random dots 
 var random_between = function(x, y){
   if (x >= y){
     return Math.floor(Math.random() * (x-y)) + y;
@@ -310,6 +323,7 @@ var random_between = function(x, y){
   }
 }
 
+// plots dots for car density
 var car_density = function(){
   remove_circles(circles_cars);
   d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
@@ -346,6 +360,7 @@ var car_density = function(){
   cars_drawn = true;
 };
 
+// plots dots for lung density
 var lung_density = function(){
   remove_circles(circles_lungs);
   d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
@@ -380,6 +395,9 @@ var lung_density = function(){
   lungs_drawn = true;
 };
 
+
+// changes the appearance of lunch cancer and car density buttons
+// to show whether they are toggled.
 var cd = document.getElementById("cd");
 var lcr = document.getElementById("lcr");
 
