@@ -1,3 +1,4 @@
+var state_centers = {'10':[840.2066179677938,255.63732126174412],'12':[755.7455589627274,507.77862074199203],'13':[724.6900955022221,421.08405926136544],'15':[294.8045564922889,563.9882785155545],'16':[195.69641319595496,144.04932750429586],'17':[605.5763832710608,265.66623033740524],'18':[655.1309047705755,264.6912334156099],'19':[531.5840559002303,223.46911250901823],'20':[449.1730262150776,304.19757566749564],'21':[677.655116118911,315.7724926729923],'22':[567.4194512748293,470.7758518227551],'23':[904.8901409133521,91.86682235977892],'24':[818.8052621621626,259.14984417158763],'25':[883.6611759972714,169.60417446521842],'26':[659.2381728731771,164.2050159543356],'27':[516.5946653249242,129.6414015896711],'28':[608.5724003479579,430.5058530941247],'29':[551.7866256428767,306.6374343984268],'30':[282.51861048889253,97.84955423272905],'31':[427.3878540702531,234.86498780130137],'32':[139.96003190313502,247.69480087851903],'33':[878.895001668018,137.77025897772197],'34':[848.2752124691982,226.3400237317859],'35':[305.79809621840445,386.95742730333643],'36':[821.0483874311232,168.85705199139625],'37':[788.6451313495172,344.85361485855384],'38':[422.4987986530495,102.22408188477799],'39':[712.6873765706466,248.7517063896311],'40':[463.4685502305517,369.98958043796404],'41':[101.04986267322434,131.70723811769813],'42':[793.3713505198033,221.84576222657273],'44':[890.783475076746,181.18284880525738],'45':[767.2927002325082,386.0424383160666],'46':[423.130656806072,169.3620783670036],'47':[663.1906107071137,355.3419995607502],'48':[427.38996674052504,461.72137863589705],'49':[223.2502814234199,264.31946020337864],'50':[859.8485575029607,133.62590954714943],'51':[790.1958748968983,299.4572677108202],'53':[122.30239154218933,57.68528887763333],'54':[754.8872268789042,279.9511484889455],'55':[585.573902034637,163.7758248372078],'56':[303.1196645277344,191.96194785876492],'06':[80.82258312576948,283.40167845343757],'04':[204.82509225786282,376.1956676070532],'08':[326.45245404671317,285.1175806413173],'05':[554.9820493311587,384.6340056909818],'01':[661.2989606456629,425.24010249738404],'09':[872.259991483655,187.21492246865907],'02':[100.87677335205404,514.8161067939221]};
 var states = {"53":"Washington",
                "41":"Oregon",
                "06":"California",
@@ -55,6 +56,7 @@ var lung_cancer_state = {'56': 50, '54': 110, '37': 80, '22': 76, '45': 82, '36'
 
 var air_pollution = {'56': 29.0, '54': 5.7, '28': 39.0, '22': 13.9, '50': 4.2, '19': 17.0, '35': 29.0, '23': 60.0, '24': 26.0, '25': 43.0, '26': 51.5, '27': 59.0, '06': 233.0, '21': 28.0, '04': 79.0, '49': 91.0, '46': 130.0, '47': 9.6, '08': 24.0, '45': 31.0, '42': 29.7, '29': 66.0, '40': 43.0, '41': 14.0, '09': 12.0, '05': 6.0, '51': 9.6, '02': 76.0, '01': 25.0, '13': 12.0, '12': 38.0, '20': 40.0, '10': 4.4, '39': 19.2, '38': 32.0, '15': 29.0, '48': 29.4, '17': 17.5, '16': 20.0, '55': 28.0, '32': 74.0, '31': 7.0, '30': 38.0, '37': 22.0, '36': 87.0, '53': 151.0, '34': 25.0, '33': 5.0, '18': 22.0, '44': 3.0} //Measured in  µg/m³
 
+var circles = [];
 
 var width = 1150, height = 650, centered;
 
@@ -72,6 +74,7 @@ svg.append("rect")
 
 var g = svg.append("g");
 var text;
+var cd_clicked = false;
 
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   if (error) throw error;
@@ -114,16 +117,25 @@ function rgb(c) {
     return "#" + component + component + component;
 }
 
+function remove_circles(){
+  for(var i = 0; i < circles.length; i ++){
+    circles[i].remove();
+  }
+}
+
 function clicked(d) {
   if(text)
     unhovered();
   var x, y, k;
+
+
   if (d && centered !== d) {
     var centroid = path.centroid(d);
     x = centroid[0];
     y = centroid[1];
     k = 4;
     centered = d;
+    remove_circles();
     // if (!text){
     //   text = svg.append("text")
     //
@@ -140,6 +152,7 @@ function clicked(d) {
     y = height / 2;
     k = 1;
     centered = null;
+    car_density();
   }
 
   g.selectAll("path")
@@ -156,7 +169,7 @@ function clicked(d) {
   //       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
   //       .style("stroke-width", 1.5 / k + "px");
 }
-
+sum = {}
 var hovered = function(d){
   if (text)
     unhovered();
@@ -168,6 +181,7 @@ var hovered = function(d){
   text.html(states[d.id])
       .attr("x", x - states[d.id].length * 5)
       .attr("y", y);
+  sum[d.id] = [centroid[0], centroid[1]];
   if(states[d.id] == "California"){
     text.style("fill", "#FFFFFF")
   }
@@ -203,9 +217,53 @@ svg.append("g")
 
   // .on("cellclick", function(d){alert("clicked " + d);});
 
-svg.select(".legendSymbol")
-  .call(legendPath);
+var car_density = function(){
+  d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
+    if (error) throw error;
+    stts = topojson.feature(us, us.objects.states).features;
+    for (state of stts){
+      //console.log(state)
+      var x, y;
+      //console.log(state_centers[state["id"]])
 
+      var x = state_centers[state["id"]][0];
+      var y = state_centers[state["id"]][1];
+
+      for(i = 0; i<Math.round(car_accidents[state["id"]]/100); i++){
+        circle = svg.append("circle");
+        circles.push(circle);
+        var rand_x = Math.floor(Math.random()*50) - 25;
+        var rand_y = Math.floor(Math.random()*50) - 25;
+
+        circle.attr("stroke", "black")
+            .attr("cx", x + rand_x)
+            .attr("cy", y + rand_y)
+            .attr("r", 3)
+            .style("fill", "#FF0000");
+      }
+    }
+  });
+    // var x, y;
+    // var centroid = path.centroid(d);
+    // x = centroid[0];
+    // y = centroid[1];
+    // console.log(car_accidents[d.id]/10);
+    // for(i = 0; i<Math.round(car_accidents[d.id]/10); i++){
+    //   circle = svg.append("circle")
+    //   var rand_x = Math.floor(Math.random()*10)-5;
+    //   rand_x = rand_x * 5
+    //   var rand_y = Math.floor(Math.random()*10)-5;
+    //   rand_y = rand_y * 5
+    //
+    //   circle.attr("stroke", "black")
+    //       .attr("cx", x - states[d.id].length + rand_x)
+    //       .attr("cy", y + rand_y)
+    //       .attr("r", 5)
+    //       .style("fill", "#FF0000");
+    // }
+
+
+  };
 
 var cd = document.getElementById("cd");
 var lcr = document.getElementById("lcr");
@@ -213,7 +271,20 @@ var lcr = document.getElementById("lcr");
 cd.addEventListener('click', function(){
   cd.setAttribute("class", "btn btn-primary");
   lcr.setAttribute("class", "btn btn-secondary");
-  car_density();
+  if(!cd_clicked){
+    car_density();
+  }
+  else{
+    remove_circles();
+  }
+  cd_clicked = !cd_clicked;
+
+  // s = "{"
+  // for (ss of Object.keys(sum)){
+  //   s += "'" + ss + "'" + ":[" + sum[ss][0] + "," + sum[ss][1] + "],"
+  // }
+  // s = s.substring(0, s.length - 1) + "}";
+  // console.log(s, Object.keys(sum).length);
 });
 
 lcr.addEventListener('click', function(){
