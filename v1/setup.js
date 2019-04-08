@@ -50,14 +50,14 @@ var states = {"53":"Washington",
                "02":"Alaska",
                "15":"Hawaii"};
 
-var car_accidents = {'45': 1439, '28': 929, '50': 79, '53': 795, '32': 476, '04': 1340, '24': 843, '25': 522, '26': 1570, '27': 577, '06': 5605, '21': 1204, '48': 5502, '23': 207, '46': 140, '47': 1488, '08': 901, '09': 461, '42': 1768, '29': 1322, '40': 968, '41': 678, '05': 778, '02': 110, '56': 158, '10': 183, '33': 175, '13': 2201, '01': 1455, '30': 215, '20': 564, '38': 139, '51': 1058, '39': 1683, '12': 4677, '15': 156, '22': 1103, '17': 1617, '16': 326, '55': 813, '18': 1236, '31': 308, '49': 411, '37': 2052, '36': 1495, '35': 518, '34': 875, '19': 561, '54': 368, '44': 69, 'total': 54118}
+var car_accidents = {'45': 1439, '28': 929, '50': 79, '53': 795, '32': 476, '04': 1340, '24': 843, '25': 522, '26': 1570, '27': 577, '06': 5605, '21': 1204, '48': 5502, '23': 207, '46': 140, '47': 1488, '08': 901, '09': 461, '42': 1768, '29': 1322, '40': 968, '41': 678, '05': 778, '02': 110, '56': 158, '10': 183, '33': 175, '13': 2201, '01': 1455, '30': 215, '20': 564, '38': 139, '51': 1058, '39': 1683, '12': 4677, '15': 156, '22': 1103, '17': 1617, '16': 326, '55': 813, '18': 1236, '31': 308, '49': 411, '37': 2052, '36': 1495, '35': 518, '34': 875, '19': 561, '54': 368, '44': 69, 'total': 54118} // * 100
 
-var lung_cancer_state = {'56': 50, '54': 110, '37': 80, '22': 76, '45': 82, '36': 70, '53': 62, '42': 84, '02': 47, '25': 75, '23': 101, '27': 63, '20': 69, '21': 110, '04': 59, '49': 22, '46': 69, '47': 90, '08': 44, '09': 74, '28': 86, '29': 89, '40': 81, '41': 68, '05': 95, '24': 63, '44': 86, '01': 82, '26': 80, '12': 84, '06': 44, '13': 65, '10': 89, '39': 85, '38': 67, '15': 57, '48': 50, '17': 73, '16': 56, '19': 78, '32': 61, '31': 67, '30': 72, '51': 65, '50': 83, '35': 47, '34': 67, '55': 72, '18': 83, '33': 82} //NUMBER OF CASES PER 100,000 people
+var lung_cancer_state = {'56': 50, '54': 110, '37': 80, '22': 76, '45': 82, '36': 70, '53': 62, '42': 84, '02': 47, '25': 75, '23': 101, '27': 63, '20': 69, '21': 110, '04': 59, '49': 22, '46': 69, '47': 90, '08': 44, '09': 74, '28': 86, '29': 89, '40': 81, '41': 68, '05': 95, '24': 63, '44': 86, '01': 82, '26': 80, '12': 84, '06': 44, '13': 65, '10': 89, '39': 85, '38': 67, '15': 57, '48': 50, '17': 73, '16': 56, '19': 78, '32': 61, '31': 67, '30': 72, '51': 65, '50': 83, '35': 47, '34': 67, '55': 72, '18': 83, '33': 82} //NUMBER OF CASES PER 1,000,000 people
 
 var air_pollution = {'56': 29.0, '54': 5.7, '28': 39.0, '22': 13.9, '50': 4.2, '19': 17.0, '35': 29.0, '23': 60.0, '24': 26.0, '25': 43.0, '26': 51.5, '27': 59.0, '06': 233.0, '21': 28.0, '04': 79.0, '49': 91.0, '46': 130.0, '47': 9.6, '08': 24.0, '45': 31.0, '42': 29.7, '29': 66.0, '40': 43.0, '41': 14.0, '09': 12.0, '05': 6.0, '51': 9.6, '02': 76.0, '01': 25.0, '13': 12.0, '12': 38.0, '20': 40.0, '10': 4.4, '39': 19.2, '38': 32.0, '15': 29.0, '48': 29.4, '17': 17.5, '16': 20.0, '55': 28.0, '32': 74.0, '31': 7.0, '30': 38.0, '37': 22.0, '36': 87.0, '53': 151.0, '34': 25.0, '33': 5.0, '18': 22.0, '44': 3.0} //Measured in  µg/m³
 
-var circles = [];
-
+var circles_cars = [];
+var circles_lungs = [];
 var width = 1150, height = 650, centered;
 
 var path = d3.geoPath();
@@ -75,6 +75,8 @@ svg.append("rect")
 var g = svg.append("g");
 var text;
 var cd_clicked = false;
+var lcr_clicked = false;
+var zoomed = false;
 
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   if (error) throw error;
@@ -117,7 +119,7 @@ function rgb(c) {
     return "#" + component + component + component;
 }
 
-function remove_circles(){
+function remove_circles(circles){
   for(var i = 0; i < circles.length; i ++){
     circles[i].remove();
   }
@@ -138,7 +140,9 @@ function clicked(d) {
     y = centroid[1];
     k = 4;
     centered = d;
-    remove_circles();
+    remove_circles(circles_cars);
+    remove_circles(circles_lungs);
+    zoomed = true;
     // if (!text){
     //   text = svg.append("text")
     //
@@ -151,6 +155,7 @@ function clicked(d) {
     //   text.remove();
     //   text = null;
     // }
+    zoomed = false;
     document.getElementById("data").hidden = true;
     x = width / 2;
     y = height / 2;
@@ -158,6 +163,9 @@ function clicked(d) {
     centered = null;
     if(cd_clicked){
       car_density();
+    }
+    if(lcr_clicked){
+      lung_density();
     }
   }
 
@@ -249,42 +257,79 @@ var car_density = function(){
       }
     }
   });
-    // var x, y;
-    // var centroid = path.centroid(d);
-    // x = centroid[0];
-    // y = centroid[1];
-    // console.log(car_accidents[d.id]/10);
-    // for(i = 0; i<Math.round(car_accidents[d.id]/10); i++){
-    //   circle = svg.append("circle")
-    //   var rand_x = Math.floor(Math.random()*10)-5;
-    //   rand_x = rand_x * 5
-    //   var rand_y = Math.floor(Math.random()*10)-5;
-    //   rand_y = rand_y * 5
-    //
-    //   circle.attr("stroke", "black")
-    //       .attr("cx", x - states[d.id].length + rand_x)
-    //       .attr("cy", y + rand_y)
-    //       .attr("r", 5)
-    //       .style("fill", "#FF0000");
-    // }
+};
 
+var car_density = function(){
+  d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
+    if (error) throw error;
+    stts = topojson.feature(us, us.objects.states).features;
+    for (state of stts){
+      //console.log(state)
+      var x, y;
+      //console.log(state_centers[state["id"]])
 
-  };
+      var x = state_centers[state["id"]][0];
+      var y = state_centers[state["id"]][1];
+
+      for(i = 0; i<Math.round(car_accidents[state["id"]]/100); i++){
+        circle = svg.append("circle");
+        circles_cars.push(circle);
+        var rand_x = Math.floor(Math.random()*50) - 25;
+        var rand_y = Math.floor(Math.random()*50) - 25;
+
+        circle.attr("stroke", "black")
+            .attr("cx", x + rand_x)
+            .attr("cy", y + rand_y)
+            .attr("r", 3)
+            .style("fill", "#FF0000");
+      }
+    }
+  });
+};
+
+var lung_density = function(){
+  d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
+    if (error) throw error;
+    stts = topojson.feature(us, us.objects.states).features;
+    for (state of stts){
+      //console.log(state)
+      var x, y;
+      //console.log(state_centers[state["id"]])
+
+      var x = state_centers[state["id"]][0];
+      var y = state_centers[state["id"]][1];
+
+      for(i = 0; i<Math.round(lung_cancer_state[state["id"]]/10); i++){
+        circle = svg.append("circle");
+        circles_lungs.push(circle);
+        var rand_x = Math.floor(Math.random()*50) - 25;
+        var rand_y = Math.floor(Math.random()*50) - 25;
+
+        circle.attr("stroke", "black")
+            .attr("cx", x + rand_x)
+            .attr("cy", y + rand_y)
+            .attr("r", 3)
+            .style("fill", "#00FF00");
+      }
+    }
+  });
+};
 
 var cd = document.getElementById("cd");
 var lcr = document.getElementById("lcr");
 
 cd.addEventListener('click', function(){
-  cd.setAttribute("class", "btn btn-primary");
-  lcr.setAttribute("class", "btn btn-secondary");
-  if(!cd_clicked){
-    car_density();
+  if(!zoomed){
+    if(!cd_clicked){
+      car_density();
+      cd.setAttribute("class", "btn btn-primary");
+    }
+    else{
+      remove_circles(circles_cars);
+      cd.setAttribute("class", "btn btn-secondary");
+    }
+    cd_clicked = !cd_clicked;
   }
-  else{
-    remove_circles();
-  }
-  cd_clicked = !cd_clicked;
-
   // s = "{"
   // for (ss of Object.keys(sum)){
   //   s += "'" + ss + "'" + ":[" + sum[ss][0] + "," + sum[ss][1] + "],"
@@ -294,6 +339,15 @@ cd.addEventListener('click', function(){
 });
 
 lcr.addEventListener('click', function(){
-  lcr.setAttribute("class", "btn btn-primary");
-  cd.setAttribute("class", "btn btn-secondary");
+  if(!zoomed){
+    if(!lcr_clicked && !zoomed){
+      lung_density();
+      lcr.setAttribute("class", "btn btn-primary");
+    }
+    else{
+      remove_circles(circles_lungs);
+      lcr.setAttribute("class", "btn btn-secondary");
+    }
+    lcr_clicked = !lcr_clicked;
+  }
 });
