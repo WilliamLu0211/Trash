@@ -58,7 +58,7 @@ var air_pollution = {'56': 29.0, '54': 5.7, '28': 39.0, '22': 13.9, '50': 4.2, '
 
 var circles_cars = [];
 var circles_lungs = [];
-var width = 1150, height = 650, centered;
+var width = 1300, height = 650, centered;
 
 var path = d3.geoPath();
 
@@ -132,9 +132,7 @@ function clicked(d) {
 
 
   if (d && centered !== d) {
-    var newString = "State: " + states[d.id] + "," + " Car Accidents: " + String(car_accidents[d.id]) + " deaths, Lung Cancer Cases: " + String(lung_cancer_state[d.id]) + " per 100,000 people per state, Air Pollution: " + String(air_pollution[d.id]) + "µg/m³";
-    document.getElementById("data").hidden = false;
-    document.getElementById("data").innerHTML = newString;
+
     var centroid = path.centroid(d);
     x = centroid[0];
     y = centroid[1];
@@ -143,18 +141,20 @@ function clicked(d) {
     remove_circles(circles_cars);
     remove_circles(circles_lungs);
     zoomed = true;
-    // if (!text){
-    //   text = svg.append("text")
-    //
-    // }
-    // text.html(states[d.id])
-    //     .attr("x", x - states[d.id].length * 3)
-    //     .attr("y", y - 15);
+    if (!text){
+      text = svg.append("text")
+
+    }
+    var newString = "State: " + states[d.id] + "\n" + " Car Accidents: " + String(car_accidents[d.id]*100) + " deaths, Lung Cancer Cases: " + String(lung_cancer_state[d.id]*100000) + "people, Air Pollution: " + String(air_pollution[d.id]) + "µg/m³";
+
+    text.html(newString)
+        .attr("x", x - states[d.id].length * 3)
+        .attr("y", y - 15);
   } else {
-    // if (text){
-    //   text.remove();
-    //   text = null;
-    // }
+    if (text){
+      text.remove();
+      text = null;
+    }
     zoomed = false;
     document.getElementById("data").hidden = true;
     x = width / 2;
@@ -209,6 +209,9 @@ var unhovered = function(d){
 };
 
 
+var cir = d3.symbol().type(d3.symbolCircle)();
+console.log(cir);
+
 // Color legend.
 var colorScale = d3.scaleQuantize()
   .domain([233, 3])
@@ -221,12 +224,34 @@ var colorLegend = d3.legendColor()
   .shapeWidth(50)
   .shapeHeight(20)
   .labelOffset(12)
+  // .on("click", function(d){console.log(d)})
   .title("Air Pollution Levels in µg/m³");
 
 svg.append("g")
   .attr("transform", "translate(900, 300)")
   .style("font-size","5px")
   .call(colorLegend);
+
+var ordinal = d3.scaleOrdinal()
+  .domain(["Car Accidents in Hundreds", "Lung Cancer Deaths per 1,000,000 People"])
+  .range([ "rgb(255, 0, 0)", "rgb(0, 255, 0)"]);
+
+svg.append("g")
+  .attr("class", "legendOrdinal")
+  .attr("transform", "translate(900,225)");
+
+var legendOrdinal = d3.legendColor()
+  //d3 symbol creates a path-string, for example
+  //"M0,-8.059274488676564L9.306048591020996,
+  //8.059274488676564 -9.306048591020996,8.059274488676564Z"
+  .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
+  .shapePadding(10)
+  //use cellFilter to hide the "e" cell
+  .scale(ordinal);
+
+svg.select(".legendOrdinal")
+  .call(legendOrdinal);
+
 
 
   // .on("cellclick", function(d){alert("clicked " + d);});
