@@ -127,6 +127,8 @@ function remove_circles(circles){
 
 function clicked(d) {
   unhovered();
+  remove_circles(circles_cars);
+  remove_circles(circles_lungs);
   if (detail){
     detail.remove();
     detail = null;
@@ -297,34 +299,6 @@ svg.select(".legendOrdinal")
 
   // .on("cellclick", function(d){alert("clicked " + d);});
 
-var car_density = function(){
-  d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
-    if (error) throw error;
-    stts = topojson.feature(us, us.objects.states).features;
-    for (state of stts){
-      console.log(state)
-      var x, y;
-      //console.log(state_centers[state["id"]])
-
-      var x = state_centers[state["id"]][0];
-      var y = state_centers[state["id"]][1];
-
-      for(i = 0; i<Math.round(car_accidents[state["id"]]/100); i++){
-        circle = svg.append("circle");
-        circles.push(circle);
-        var rand_x = Math.floor(Math.random()*50) - 25;
-        var rand_y = Math.floor(Math.random()*50) - 25;
-
-        circle.attr("stroke", "black")
-            .attr("cx", x + rand_x)
-            .attr("cy", y + rand_y)
-            .attr("r", 3)
-            .style("fill", "#FF0000");
-      }
-    }
-  });
-};
-
 var random_between = function(x, y){
   if (x >= y){
     return Math.floor(Math.random() * (x-y)) + y;
@@ -335,6 +309,7 @@ var random_between = function(x, y){
 }
 
 var car_density = function(){
+  remove_circles(circles_cars);
   d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     if (error) throw error;
     stts = topojson.feature(us, us.objects.states).features;
@@ -369,6 +344,7 @@ var car_density = function(){
 };
 
 var lung_density = function(){
+  remove_circles(circles_lungs);
   d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     if (error) throw error;
     stts = topojson.feature(us, us.objects.states).features;
