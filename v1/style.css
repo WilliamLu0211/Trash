@@ -3,9 +3,9 @@
   pointer-events: all;
 }
 
-/* body {
-  background-color: black;
-} */
+body {
+  background-color: #87ceeb;
+}
 
 h1 {
   text-align: center;
