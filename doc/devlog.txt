@@ -67,3 +67,9 @@ williamL -- 2019-04-04 19:40
 williamL -- 2019-04-05 10:40
 --------------------------------------------------------------
 - changed state label font size
+==============================================================
+williamL -- 2019-04-08 2:40
+--------------------------------------------------------------
+- fixed multiple-line detail display
+- moved js and css to /static
+- added design doc

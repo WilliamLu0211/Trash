@@ -73,7 +73,7 @@ svg.append("rect")
    .on("click", clicked);
 
 var g = svg.append("g");
-var text;
+var detail, label;
 var cd_clicked = false;
 var lcr_clicked = false;
 var zoomed = false;
@@ -126,10 +126,13 @@ function remove_circles(circles){
 }
 
 function clicked(d) {
-  if(text)
-    unhovered();
+  unhovered();
+  if (detail){
+    detail.remove();
+    detail = null;
+  }
   var x, y, k;
-
+  var z = zoomed;
 
   if (d && centered !== d) {
 
@@ -140,20 +143,47 @@ function clicked(d) {
     centered = d;
     remove_circles(circles_cars);
     remove_circles(circles_lungs);
+    // if (!text){
+    detail = svg.append("text");
+
+    // }
+    if (zoomed)
+      detail.attr("x", width / 2 - 100)
+          .attr("y", height / 2);
+    else
+      detail.attr("x", x - states[d.id].length * 3)
+          .attr("y", y - 15);
+
     zoomed = true;
-    if (!text){
-      text = svg.append("text")
+    detail.append("tspan")
+        .html("State: " + states[d.id]);
 
-    }
-    var newString = "State: " + states[d.id] + "\n" + " Car Accidents: " + String(car_accidents[d.id]*100) + " deaths, Lung Cancer Cases: " + String(lung_cancer_state[d.id]*100000) + "people, Air Pollution: " + String(air_pollution[d.id]) + "µg/m³";
+    detail.append("tspan")
+        .attr("dy", "20px")
+        .attr("dx", (-7 - states[d.id].length) * 10 + "px")
+        .html("Car Accidents: " + String(car_accidents[d.id]*100) + " deaths");
 
-    text.html(newString)
-        .attr("x", x - states[d.id].length * 3)
-        .attr("y", y - 15);
+    detail.append("tspan")
+        .attr("dy", "20px")
+        .attr("dx", (-21 - String(car_accidents[d.id]*100).length) * 10 + "px")
+        .html("Lung Cancer Cases: " + String(lung_cancer_state[d.id]*100000) + " people");
+
+    detail.append("tspan")
+        .attr("dy", "20px")
+        .attr("dx", (-26 - String(lung_cancer_state[d.id]*100000).length) * 10 + "px")
+        .html("Air Pollution: " + String(air_pollution[d.id]) + " µg/m³");
+
+    if (states[d.id] == "California")
+      detail.style("fill", "#FFFFFF");
+    // var newString = "State: " + states[d.id] + "\n" + " Car Accidents: " + String(car_accidents[d.id]*100) + " deaths, Lung Cancer Cases: " + String(lung_cancer_state[d.id]*100000) + "people, Air Pollution: " + String(air_pollution[d.id]) + "µg/m³";
+
+    // text.html(newString)
+    //     .attr("x", x - states[d.id].length * 3)
+    //     .attr("y", y - 15);
   } else {
-    if (text){
-      text.remove();
-      text = null;
+    if (detail){
+      detail.remove();
+      detail = null;
     }
     zoomed = false;
     document.getElementById("data").hidden = true;
@@ -177,35 +207,46 @@ function clicked(d) {
    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
    .style("stroke-width", 1.5 / k + "px");
 
-  // if (text)
-  //   text.transition()
-  //       .duration(750)
-  //       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-  //       .style("stroke-width", 1.5 / k + "px");
+  if (detail && !z)
+  detail.transition()
+   .duration(750)
+   .attr("transform", "translate(" + (width / 2 - 100) + "," + height / 2 + ")translate(" + -x + "," + -y + ")");
+   // .style("stroke-width", 1.5 / k + "px");
 }
-sum = {}
+sum = {};
 var hovered = function(d){
-  if (text)
+  if (!zoomed || d != centered){
     unhovered();
-  var x, y;
-  var centroid = path.centroid(d);
-  x = centroid[0];
-  y = centroid[1];
-  text = svg.append("text")
-  text.html(states[d.id])
-      .attr("x", x - states[d.id].length * 5)
-      .attr("y", y);
-  sum[d.id] = [centroid[0], centroid[1]];
-  if(states[d.id] == "California"){
-    text.style("fill", "#FFFFFF")
+    var x, y;
+    var centroid = path.centroid(d);
+    x = centroid[0];
+    y = centroid[1];
+    label = svg.append("text")
+              .html(states[d.id])
+              .attr("x", x - states[d.id].length * 5)
+              .attr("y", y);
+    sum[d.id] = [centroid[0], centroid[1]];
+    if(states[d.id] == "California"){
+      label.style("fill", "#FFFFFF");
+    }
+
+    if (zoomed){
+      var c = path.centroid(centered);
+      var x0 = c[0];
+      var y0 = c[1];
+      label.transition()
+           .duration(0)
+           .attr("transform", "translate(" + (x - x0) * 4 + "," + (y - y0) * 4 + ")translate(" + width / 2 + "," + height / 2 + ")translate(" + -x + "," + -y + ")");
+       // .style("stroke-width", 1.5 / k + "px");
+    }
   }
-
-
 };
 
 var unhovered = function(d){
-  text.remove();
-  text = null;
+  if (label){
+    label.remove();
+    label = null;
+  }
 };
 
 
