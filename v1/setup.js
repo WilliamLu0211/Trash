@@ -82,9 +82,8 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
    .data(topojson.feature(us, us.objects.states).features)
    .enter().append("path")
    .style('fill', (d, i) => {
-                    var pollute = Math.round(Math.floor(256 * air_pollution[d.id] / (233.0 + 1)))
-                    console.log(air_pollution[d.id], states[d.id])
-                    return rgbToHex(255 - pollute);
+                    var pollute = Math.round(Math.floor(256 * air_pollution[d.id] / (234.0)))
+                    return rgb(255 - pollute);
                 })
    .attr("d", path)
    .on("click", clicked)
@@ -99,7 +98,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 
 });
 
-function rgbToHex(c) {
+function rgb(c) {
     if(c == 255){
       c = 250
     }
@@ -167,8 +166,12 @@ var hovered = function(d){
   y = centroid[1];
   text = svg.append("text")
   text.html(states[d.id])
-      .attr("x", x - states[d.id].length * 10)
+      .attr("x", x - states[d.id].length * 5)
       .attr("y", y);
+  if(states[d.id] == "California"){
+    text.style("fill", "#FFFFFF")
+  }
+
 
 };
 
