@@ -302,7 +302,7 @@ var car_density = function(){
     if (error) throw error;
     stts = topojson.feature(us, us.objects.states).features;
     for (state of stts){
-      //console.log(state)
+      console.log(state)
       var x, y;
       //console.log(state_centers[state["id"]])
 
@@ -325,12 +325,21 @@ var car_density = function(){
   });
 };
 
+var random_between = function(x, y){
+  if (x >= y){
+    return Math.floor(Math.random() * (x-y)) + y;
+  }
+  else{
+    return Math.floor(Math.random() * (y-x)) + x;
+  }
+}
+
 var car_density = function(){
   d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     if (error) throw error;
     stts = topojson.feature(us, us.objects.states).features;
     for (state of stts){
-      //console.log(state)
+      var border_cors = state["geometry"]["coordinates"][0][0];
       var x, y;
       //console.log(state_centers[state["id"]])
 
@@ -338,10 +347,16 @@ var car_density = function(){
       var y = state_centers[state["id"]][1];
 
       for(i = 0; i<Math.round(car_accidents[state["id"]]/100); i++){
+        var rand_border = border_cors[Math.floor(Math.random()*border_cors.length)];
+        // console.log(x, rand_border[0]);
+        // console.log(y, rand_border[1]);
+        x = random_between(x, rand_border[0]);
+        y = random_between(y, rand_border[1]);
+        // console.log(x,y);
         circle = svg.append("circle");
         circles_cars.push(circle);
-        var rand_x = Math.floor(Math.random()*50) - 25;
-        var rand_y = Math.floor(Math.random()*50) - 25;
+        var rand_x = 0//Math.floor(Math.random()*50) - 25;
+        var rand_y = 0//Math.floor(Math.random()*50) - 25;
 
         circle.attr("stroke", "black")
             .attr("cx", x + rand_x)
@@ -358,6 +373,7 @@ var lung_density = function(){
     if (error) throw error;
     stts = topojson.feature(us, us.objects.states).features;
     for (state of stts){
+      var border_cors = state["geometry"]["coordinates"][0][0];
       //console.log(state)
       var x, y;
       //console.log(state_centers[state["id"]])
@@ -366,10 +382,13 @@ var lung_density = function(){
       var y = state_centers[state["id"]][1];
 
       for(i = 0; i<Math.round(lung_cancer_state[state["id"]]/10); i++){
+        var rand_border = border_cors[Math.floor(Math.random()*border_cors.length)];
+        x = random_between(x, rand_border[0]);
+        y = random_between(y, rand_border[1]);
         circle = svg.append("circle");
         circles_lungs.push(circle);
-        var rand_x = Math.floor(Math.random()*50) - 25;
-        var rand_y = Math.floor(Math.random()*50) - 25;
+        var rand_x = 0// Math.floor(Math.random()*50) - 25;
+        var rand_y = 0//Math.floor(Math.random()*50) - 25;
 
         circle.attr("stroke", "black")
             .attr("cx", x + rand_x)

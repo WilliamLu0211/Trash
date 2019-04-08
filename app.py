@@ -1,5 +1,5 @@
 import os
-from urllib import request
+#from urllib import request
 
 from flask import Flask, request, render_template, \
                   flash, url_for, redirect
